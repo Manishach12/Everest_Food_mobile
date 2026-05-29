@@ -1,4 +1,4 @@
-import 'package:everest_food_app/view/onboarding_screen.dart';
+import 'package:everest_food/view/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashView extends StatefulWidget {

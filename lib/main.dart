@@ -1,4 +1,4 @@
-import 'package:everest_food_app/app.dart';
+import 'package:everest_food/app.dart';
 import 'package:flutter/material.dart';
 
 void main() {

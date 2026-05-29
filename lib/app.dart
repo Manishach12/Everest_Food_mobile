@@ -1,4 +1,4 @@
-import 'package:everest_food_app/view/splash_screen.dart';
+import 'package:everest_food/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:everest_food_app/view/login_screen.dart';
+import 'package:everest_food/view/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -12,22 +12,21 @@ class _OnboardingScreenState extends State<OnboardingView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  // Onboarding content
-  final List<Map<String, String>> _onboardingData = [
+  final List<Map<String, dynamic>> _onboardingData = [
     {
-      "image": "assets/images/welcome.png",
+      "icon": Icons.landscape,
       "title": "Freshness from the Peaks",
       "description":
           "Experience the authentic taste of Everest delivered straight to your doorstep.",
     },
     {
-      "image": "assets/images/delivery.png",
+      "icon": Icons.delivery_dining,
       "title": "Lightning Fast Delivery",
       "description":
           "Our riders are as fast as the mountain wind. Your food stays hot and fresh.",
     },
     {
-      "image": "assets/images/payment.png",
+      "icon": Icons.payment,
       "title": "Easy & Secure Payments",
       "description":
           "Pay with ease using local wallets or cards. Secure and seamless transactions.",
@@ -43,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingView> {
 
   @override
   void dispose() {
-    _pageController.dispose(); // ✅ Prevent memory leaks
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -54,7 +53,6 @@ class _OnboardingScreenState extends State<OnboardingView> {
       body: SafeArea(
         child: Column(
           children: [
-            // Skip Button
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
@@ -65,8 +63,7 @@ class _OnboardingScreenState extends State<OnboardingView> {
                 ),
               ),
             ),
-
-            // PageView
+            // ✅ Wrap PageView in Expanded + SingleChildScrollView to avoid overflow
             Expanded(
               flex: 3,
               child: PageView.builder(
@@ -75,18 +72,16 @@ class _OnboardingScreenState extends State<OnboardingView> {
                   setState(() => _currentPage = index);
                 },
                 itemCount: _onboardingData.length,
-                itemBuilder: (context, index) => _buildPageContent(index),
+                itemBuilder: (context, index) =>
+                    SingleChildScrollView(child: _buildPageContent(index)),
               ),
             ),
-
-            // Bottom Section
             Expanded(
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   children: [
-                    // Dots Indicator
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
@@ -95,15 +90,13 @@ class _OnboardingScreenState extends State<OnboardingView> {
                       ),
                     ),
                     const Spacer(),
-
-                    // Next / Get Started Button
                     SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
                         onPressed: () {
                           if (_currentPage >= _onboardingData.length - 1) {
-                            _navigateToLogin(); // ✅ Works now
+                            _navigateToLogin();
                           } else {
                             _pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
@@ -141,29 +134,27 @@ class _OnboardingScreenState extends State<OnboardingView> {
     );
   }
 
-  // Page Content
   Widget _buildPageContent(int index) {
     return Padding(
       padding: const EdgeInsets.all(40.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Image Circle
           Container(
-            height: 280,
+            height: 240, // ✅ slightly reduced height to fit all screens
             decoration: const BoxDecoration(
               color: Color(0xFFfff3e0),
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: Image.asset(
-                _onboardingData[index]['image']!,
-                height: 200,
-                fit: BoxFit.contain,
+              child: Icon(
+                _onboardingData[index]['icon'],
+                size: 120,
+                color: const Color(0xFFff7918),
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           Text(
             _onboardingData[index]['title']!,
             textAlign: TextAlign.center,
@@ -188,7 +179,6 @@ class _OnboardingScreenState extends State<OnboardingView> {
     );
   }
 
-  // Dot Indicator
   Widget _buildDot(int index) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),

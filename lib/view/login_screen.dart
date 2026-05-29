@@ -1,6 +1,6 @@
-import 'package:everest_food_app/view/dashboard_screen.dart';
-import 'package:everest_food_app/view/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:everest_food/view/dashboard_screen.dart';
+import 'package:everest_food/view/register_screen.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,13 +17,14 @@ class _LoginViewState extends State<LoginView> {
 
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
-      // Sprint 1: Logic placeholder
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Login successful (Mock)')));
+
+      // ✅ Navigate cleanly to Dashboard
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeView()),
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
     }
   }
@@ -40,8 +41,11 @@ class _LoginViewState extends State<LoginView> {
               key: _formKey,
               child: Column(
                 children: [
-                  // App Branding
-                  Image.asset('assets/images/logo1.png', height: 80),
+                  const Icon(
+                    Icons.restaurant,
+                    size: 80,
+                    color: Color(0xFFff7918),
+                  ),
                   const SizedBox(height: 10),
                   const Text(
                     'EVEREST FOOD',
@@ -54,7 +58,6 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   const SizedBox(height: 40),
 
-                  // Input Fields
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -69,6 +72,7 @@ class _LoginViewState extends State<LoginView> {
                         value!.isEmpty ? 'Enter your email' : null,
                   ),
                   const SizedBox(height: 20),
+
                   TextFormField(
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
@@ -105,6 +109,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
 
                   const SizedBox(height: 20),
+
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -124,6 +129,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
 
                   const SizedBox(height: 20),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -132,7 +138,7 @@ class _LoginViewState extends State<LoginView> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const RegisterView(),
+                            builder: (_) => const RegisterView(),
                           ),
                         ),
                         child: const Text(

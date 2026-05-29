@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -14,13 +12,10 @@ class _RegisterViewState extends State<RegisterView> {
   final _fnameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  File? _img;
   bool _termsAccepted = false;
 
-  Future _browseImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    if (image != null) setState(() => _img = File(image.path));
-  }
+  // Track if user "selected" an avatar (toggle between camera and person icon)
+  bool _avatarSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +36,27 @@ class _RegisterViewState extends State<RegisterView> {
           key: _key,
           child: Column(
             children: [
-              // Profile Picture Upload
+              // ✅ Profile Picture Placeholder (no external assets)
               GestureDetector(
-                onTap: () => _showImageSourceOptions(),
+                onTap: () {
+                  setState(() {
+                    _avatarSelected = !_avatarSelected;
+                  });
+                },
                 child: CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.grey[200],
-                  backgroundImage: _img != null ? FileImage(_img!) : null,
-                  child: _img == null
+                  child: _avatarSelected
                       ? const Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Color(0xFFff7918),
+                        )
+                      : const Icon(
                           Icons.camera_alt,
                           size: 40,
                           color: Colors.grey,
-                        )
-                      : null,
+                        ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -126,13 +128,13 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Widget _buildTextField(
-    TextController,
+    TextEditingController controller,
     String label,
     IconData icon, {
     bool isPassword = false,
   }) {
     return TextFormField(
-      controller: TextController,
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
@@ -140,28 +142,6 @@ class _RegisterViewState extends State<RegisterView> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
       ),
       validator: (val) => val!.isEmpty ? 'Field required' : null,
-    );
-  }
-
-  void _showImageSourceOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera),
-              title: const Text('Camera'),
-              onTap: () => _browseImage(ImageSource.camera),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
-              onTap: () => _browseImage(ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
